@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "prebuild": "rimraf dist && mkdirp dist",
+    "build": "concurrently \"tailwindcss -i ./src/main.css -o ./dist/main.css --minify\" \"minify ./src/index.html > ./dist/index.html\" \"minify ./src/main.js > ./dist/main.js\"",
     "dev": "http-server ./dist -p 3000 -f /index.html",
-    "watch": "nodemon --watch 'src/**/*' -e html,js --exec 'tailwindcss -i ./src/main.css -o ./dist/main.css --minify & copyfiles -f src/*.html src/*.js dist/'"
+    "prewatch": "rimraf dist && mkdirp dist",
+    "watch": "nodemon --watch 'src/**/*' -e html,js --exec 'concurrently \"tailwindcss -i ./src/main.css -o ./dist/main.css --minify\" \"copyfiles -f ./src/*.html ./src/*.js dist/\"'"
   },
   "keywords": [],
   "author": "seyLu (https://github.com/seyLu)",
@@ -15,7 +18,10 @@
     "concurrently": "^9.0.1",
     "copyfiles": "^2.4.1",
     "http-server": "^14.1.1",
+    "minify": "^11.4.1",
+    "mkdirp": "^3.0.1",
     "nodemon": "^3.1.5",
+    "rimraf": "^6.0.1",
     "tailwindcss": "^3.4.12"
   }
 }
