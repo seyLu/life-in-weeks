@@ -6,10 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "rimraf dist && mkdirp dist",
-    "build": "concurrently \"tailwindcss -i ./src/main.css -o ./dist/main.css --minify\" \"minify ./src/index.html > ./dist/index.html\" \"minify ./src/main.js > ./dist/main.js\"",
+    "build": "concurrently 'npm run build:tailwind' 'npm run build:html' 'npm run build:js' 'npm run build:datepicker'",
+    "build:tailwind": "tailwindcss -i ./src/main.css -o ./dist/main.css --minify",
+    "build:html": "minify ./src/index.html > ./dist/index.html",
+    "build:js": "minify ./src/main.js > ./dist/main.js",
+    "build:datepicker": "copyfiles -f ./node_modules/air-datepicker/air-datepicker.js ./node_modules/air-datepicker/air-datepicker.css dist/",
     "dev": "http-server ./dist -p 3000 -f /index.html",
     "prewatch": "rimraf dist && mkdirp dist",
-    "watch": "nodemon --watch 'src/**/*' -e html,js --exec 'concurrently \"tailwindcss -i ./src/main.css -o ./dist/main.css --minify\" \"copyfiles -f ./src/*.html ./src/*.js dist/\"'"
+    "watch": "nodemon --watch 'src/**/*' -e html,js --exec 'npm run build'"
   },
   "keywords": [],
   "author": "seyLu (https://github.com/seyLu)",
@@ -23,5 +27,8 @@
     "nodemon": "^3.1.5",
     "rimraf": "^6.0.1",
     "tailwindcss": "^3.4.12"
+  },
+  "dependencies": {
+    "air-datepicker": "^3.5.3"
   }
 }
