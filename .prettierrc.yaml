@@ -1,0 +1,13 @@
+semi: true
+overrides:
+  - files: "**/*.js"
+    options:
+      trailingComma: "es5"
+      semi: true
+      tabWidth: 4
+      singleQuote: true
+  - files:
+      - "*.json"
+      - "**/*.html"
+    options:
+      tabWidth: 2
