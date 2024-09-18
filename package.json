@@ -1,0 +1,21 @@
+{
+  "name": "life-in-weeks",
+  "version": "1.0.0",
+  "description": "Life in weeks. Based on a reddit post https://www.reddit.com/r/Adulting/comments/1fj6xir/life_in_a_widening_circle/.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "http-server ./dist -p 3000 -f /index.html",
+    "watch": "nodemon --watch 'src/**/*' -e html,js --exec 'tailwindcss -i ./src/main.css -o ./dist/main.css --minify & copyfiles -f src/*.html src/*.js dist/'"
+  },
+  "keywords": [],
+  "author": "seyLu (https://github.com/seyLu)",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^9.0.1",
+    "copyfiles": "^2.4.1",
+    "http-server": "^14.1.1",
+    "nodemon": "^3.1.5",
+    "tailwindcss": "^3.4.12"
+  }
+}
