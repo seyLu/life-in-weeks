@@ -4,18 +4,42 @@ const INITIAL_DATE = new Date(2000, 0, 1);
 const DATE_TODAY = new Date();
 const BOX_COLOR = 'bg-red-600';
 
-let boxes = null;
+function getElapasedWeeks(selectedDate, diff) {
+    // https://github.com/bryanbraun/your-life/blob/gh-pages/your-life.js
+    // mostly taken from reference above, with some modifications to make it work :3
+    const elapsedYears =
+        DATE_TODAY.getUTCFullYear() - selectedDate.getUTCFullYear();
+    const isThisYearsBirthdayPassed =
+        DATE_TODAY.getTime() >
+        new Date(
+            DATE_TODAY.getUTCFullYear(),
+            selectedDate.getMonth(),
+            selectedDate.getDate()
+        ).getTime();
+    let birthdayYearOffset = 0;
+    if (!isThisYearsBirthdayPassed) birthdayYearOffset = 1;
+    const dateOfLastBirthday = new Date(
+        DATE_TODAY.getUTCFullYear() - birthdayYearOffset,
+        selectedDate.getMonth(),
+        selectedDate.getDate()
+    );
+    const elapsedDaysSinceLastBirthday = Math.floor(
+        (DATE_TODAY.getTime() - dateOfLastBirthday.getTime()) /
+            (1000 * 60 * 60 * 24)
+    );
+    const elapsedWeeks =
+        elapsedYears * WEEKS_IN_YEAR +
+        Math.floor(elapsedDaysSinceLastBirthday / 7);
 
-function secondsToWeek(seconds) {
-    const weeks = seconds / 604800;
-    return Math.floor(weeks);
+    return elapsedWeeks;
 }
+
+let boxes = null;
 
 const Canvas = {
     init: () => {
         const canvas = document.getElementById('canvas');
 
-        let boxCounter = 1;
         for (let age = -1; age <= LIFESPAN; age++) {
             const row = document.createElement('div');
             row.classList.add('flex');
@@ -54,6 +78,7 @@ const Canvas = {
                 } else {
                     const box = document.createElement('div');
                     box.classList.add(
+                        'box',
                         'w-2',
                         'h-2',
                         'm-[1px]',
@@ -61,8 +86,7 @@ const Canvas = {
                         'border',
                         'border-sky-500'
                     );
-                    box.id = `box-${boxCounter}`;
-                    boxCounter++;
+                    box.dataset.week = 1 + age * WEEKS_IN_YEAR + week;
                     row.append(box);
                 }
             }
@@ -74,7 +98,7 @@ const Canvas = {
 
 const DatePicker = {
     init: () => {
-        new AirDatepicker('#datepicker', {
+        return new AirDatepicker('#datepicker', {
             locale: {
                 days: [
                     'Sunday',
@@ -133,11 +157,16 @@ const DatePicker = {
                 const timeDiffInSeconds = Math.abs(
                     (DATE_TODAY.getTime() - selectedDate.getTime()) / 1000
                 );
-                const numWeeks = secondsToWeek(timeDiffInSeconds);
+
+                const numWeeks = getElapasedWeeks(
+                    selectedDate,
+                    timeDiffInSeconds
+                );
                 const filteredBoxes = Array.from(boxes).filter((box) => {
-                    const idNum = parseInt(box.id.replace('box-', ''), 10); // Extract the number part of the id
-                    return idNum <= numWeeks; // Check if the number is less than or equal to 52
+                    const weekNum = parseInt(box.getAttribute('data-week'), 10);
+                    return weekNum <= numWeeks;
                 });
+
                 for (const box of boxes) {
                     if (filteredBoxes.includes(box)) {
                         box.classList.add(BOX_COLOR);
@@ -153,7 +182,7 @@ const DatePicker = {
 document.addEventListener('DOMContentLoaded', function () {
     Canvas.init();
 
-    boxes = document.querySelectorAll('[id^="box-"]');
+    boxes = document.querySelectorAll('.box');
     const datepicker = document.getElementById('datepicker');
     const dp = DatePicker.init();
     let isDatepickerClicked = false;

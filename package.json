@@ -8,10 +8,12 @@
     "prebuild": "rimraf dist && mkdirp dist",
     "build": "concurrently 'npm run build:tailwind' 'npm run build:html' 'npm run build:js' 'npm run build:datepicker'",
     "build:tailwind": "tailwindcss -i ./src/main.css -o ./dist/main.css --minify",
-    "build:html": "minify ./src/index.html > ./dist/index.html",
-    "build:js": "minify ./src/main.js > ./dist/main.js",
+    "build:html": "html-minifier-terser --input-dir ./src --output-dir dist/ --file-ext html --collapse-whitespace --remove-comments --minify-js true",
+    "build:js": "uglifyjs ./src/main.js -o dist/main.js -c toplevel,sequences=false -m reserved=['$','require','exports']",
+    "build:helper": "copyfiles -f ./src/constant.js ./src/helper.js dist/",
     "build:datepicker": "copyfiles -f ./node_modules/air-datepicker/air-datepicker.js ./node_modules/air-datepicker/air-datepicker.css dist/",
-    "dev": "http-server ./dist -p 3000 -f /index.html",
+    "dev": "concurrently 'npm run watch' 'npm run dev:server'",
+    "dev:server": "http-server ./dist -p 3000 -f /index.html",
     "prewatch": "rimraf dist && mkdirp dist",
     "watch": "nodemon --watch 'src/**/*' -e html,js --exec 'npm run build'"
   },
@@ -21,12 +23,13 @@
   "devDependencies": {
     "concurrently": "^9.0.1",
     "copyfiles": "^2.4.1",
+    "html-minifier-terser": "^7.2.0",
     "http-server": "^14.1.1",
-    "minify": "^11.4.1",
     "mkdirp": "^3.0.1",
     "nodemon": "^3.1.5",
     "rimraf": "^6.0.1",
-    "tailwindcss": "^3.4.12"
+    "tailwindcss": "^3.4.12",
+    "uglify-js": "^3.19.3"
   },
   "dependencies": {
     "air-datepicker": "^3.5.3"
