@@ -2,6 +2,7 @@ const LIFESPAN = 89;
 const WEEKS_IN_YEAR = 52;
 const INITIAL_DATE = new Date(2000, 0, 1);
 const DATE_TODAY = new Date();
+const BOX_WIDTH = 'w-[min(0.5rem,1.25vw)]';
 const BOX_COLOR = 'bg-red-600';
 
 function getElapasedWeeks(selectedDate, diff) {
@@ -16,8 +17,7 @@ function getElapasedWeeks(selectedDate, diff) {
             selectedDate.getMonth(),
             selectedDate.getDate()
         ).getTime();
-    let birthdayYearOffset = 0;
-    if (!isThisYearsBirthdayPassed) birthdayYearOffset = 1;
+    let birthdayYearOffset = isThisYearsBirthdayPassed ? 0 : 1;
     const dateOfLastBirthday = new Date(
         DATE_TODAY.getUTCFullYear() - birthdayYearOffset,
         selectedDate.getMonth(),
@@ -62,7 +62,7 @@ const Canvas = {
                     const weekLabel = document.createElement('div');
                     weekLabel.classList.add(
                         'mb-0',
-                        'w-2',
+                        BOX_WIDTH,
                         'h-4',
                         'm-[1px]',
                         'text-xs',
@@ -79,7 +79,7 @@ const Canvas = {
                     const box = document.createElement('div');
                     box.classList.add(
                         'box',
-                        'w-2',
+                        BOX_WIDTH,
                         'h-2',
                         'm-[1px]',
                         'border-solid',
