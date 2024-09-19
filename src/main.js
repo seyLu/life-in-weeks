@@ -15,7 +15,7 @@ const Canvas = {
     init: () => {
         const canvas = document.getElementById('canvas');
 
-        let boxCounter = 0;
+        let boxCounter = 1;
         for (let age = -1; age <= LIFESPAN; age++) {
             const row = document.createElement('div');
             row.classList.add('flex');
