@@ -1,10 +1,21 @@
 const LIFESPAN = 89;
 const WEEKS_IN_YEAR = 52;
+const INITIAL_DATE = new Date(2000, 0, 1);
+const DATE_TODAY = new Date();
+const BOX_COLOR = 'bg-red-600';
+
+let boxes = null;
+
+function secondsToWeek(seconds) {
+    const weeks = seconds / 604800;
+    return Math.floor(weeks);
+}
 
 const Canvas = {
     init: () => {
         const canvas = document.getElementById('canvas');
 
+        let boxCounter = 0;
         for (let age = -1; age <= LIFESPAN; age++) {
             const row = document.createElement('div');
             row.classList.add('flex');
@@ -50,6 +61,8 @@ const Canvas = {
                         'border',
                         'border-sky-500'
                     );
+                    box.id = `box-${boxCounter}`;
+                    boxCounter++;
                     row.append(box);
                 }
             }
@@ -116,9 +129,22 @@ const DatePicker = {
                 });
             },
             onSelect(date) {
-                console.log(date.date);
-                console.log(date.formattedDate);
-                console.log(date.datepicker);
+                const selectedDate = date.date;
+                const timeDiffInSeconds = Math.abs(
+                    (DATE_TODAY.getTime() - selectedDate.getTime()) / 1000
+                );
+                const numWeeks = secondsToWeek(timeDiffInSeconds);
+                const filteredBoxes = Array.from(boxes).filter((box) => {
+                    const idNum = parseInt(box.id.replace('box-', ''), 10); // Extract the number part of the id
+                    return idNum <= numWeeks; // Check if the number is less than or equal to 52
+                });
+                for (const box of boxes) {
+                    if (filteredBoxes.includes(box)) {
+                        box.classList.add(BOX_COLOR);
+                    } else {
+                        box.classList.remove(BOX_COLOR);
+                    }
+                }
             },
         });
     },
@@ -126,11 +152,14 @@ const DatePicker = {
 
 document.addEventListener('DOMContentLoaded', function () {
     Canvas.init();
+
+    boxes = document.querySelectorAll('[id^="box-"]');
+    const datepicker = document.getElementById('datepicker');
     const dp = DatePicker.init();
     let isDatepickerClicked = false;
-    document.getElementById('datepicker').onclick = () => {
+    datepicker.onclick = () => {
         if (!isDatepickerClicked) {
-            dp.selectDate(new Date(2000, 0, 1), { silent: false });
+            dp.selectDate(INITIAL_DATE, { silent: false });
         }
         isDatepickerClicked = true;
     };
