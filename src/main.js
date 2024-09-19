@@ -49,6 +49,18 @@ document.addEventListener('DOMContentLoaded', function () {
             timeFormat: 'hh:mm aa',
             firstDay: 0,
         },
+        dateFormat(date) {
+            return date.toLocaleString('en', {
+                year: 'numeric',
+                day: '2-digit',
+                month: 'long',
+            });
+        },
+        onSelect(date) {
+            console.log(date.date);
+            console.log(date.formattedDate);
+            console.log(date.datepicker);
+        },
     });
 
     const canvas = document.getElementById('canvas');
