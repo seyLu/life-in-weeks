@@ -4,6 +4,7 @@ const INITIAL_DATE = new Date(2000, 0, 1);
 const DATE_TODAY = new Date();
 const BOX_WIDTH = 'w-[min(0.5rem,1.25vw)]';
 const BOX_COLOR = 'bg-red-600';
+const LOADING_TIME = 3000;
 
 const isPageVisited = localStorage.getItem('isPageVisited', false);
 
@@ -192,11 +193,8 @@ const Loader = {
         loader.classList.remove('hidden');
         localStorage.setItem('isPageVisited', true);
     },
-    end: (loader, elems) => {
+    end: (loader) => {
         loader.classList.add('hidden');
-        for (const el of elems) {
-            el.classList.remove('hidden');
-        }
     },
     show: (elems) => {
         for (const el of elems) {
@@ -217,7 +215,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!isPageVisited) {
         setTimeout(() => {
-            Loader.end(loader, elems);
-        }, 3000);
+            Loader.end(loader);
+            Loader.show(elems);
+        }, LOADING_TIME);
     }
 });
