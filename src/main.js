@@ -5,6 +5,8 @@ const DATE_TODAY = new Date();
 const BOX_WIDTH = 'w-[min(0.5rem,1.25vw)]';
 const BOX_COLOR = 'bg-red-600';
 
+const isPageVisited = localStorage.getItem('isPageVisited', false);
+
 function getElapasedWeeks(selectedDate, diff) {
     // https://github.com/bryanbraun/your-life/blob/gh-pages/your-life.js
     // func getElapsedWeeeks is mostly taken from reference above, with some modifications to make it work :3
@@ -188,9 +190,15 @@ const DatePicker = {
 const Loader = {
     init: (loader) => {
         loader.classList.remove('hidden');
+        localStorage.setItem('isPageVisited', true);
     },
     end: (loader, elems) => {
         loader.classList.add('hidden');
+        for (const el of elems) {
+            el.classList.remove('hidden');
+        }
+    },
+    show: (elems) => {
         for (const el of elems) {
             el.classList.remove('hidden');
         }
@@ -199,15 +207,17 @@ const Loader = {
 
 document.addEventListener('DOMContentLoaded', function () {
     const loader = document.getElementById('loader');
-    Loader.init(loader);
+    const elems = document.querySelectorAll('.no-js');
+    !isPageVisited ? Loader.init(loader) : Loader.show(elems);
 
     Canvas.init();
     const boxes = document.querySelectorAll('.box');
     const datepicker = document.getElementById('datepicker');
     DatePicker.init(boxes, datepicker);
 
-    const elems = document.querySelectorAll('.no-js');
-    setTimeout(() => {
-        Loader.end(loader, elems);
-    }, 3000);
+    if (!isPageVisited) {
+        setTimeout(() => {
+            Loader.end(loader, elems);
+        }, 3000);
+    }
 });
