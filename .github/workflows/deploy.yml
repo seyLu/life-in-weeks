@@ -1,5 +1,5 @@
 name: Deploy
-run-name: Deployingg ${{ github.repository }}
+run-name: Deploying ${{ github.repository }}
 
 on:
   push:
@@ -14,6 +14,9 @@ jobs:
     name: Perform deploy
     runs-on: ubuntu-latest
     permissions:
+      contents: read
+      attestations: write
+      deployments: write
       pages: write
 
     strategy:
