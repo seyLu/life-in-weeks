@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "gh-pages -d dist",
     "prebuild": "rimraf dist && mkdirp dist",
     "build": "concurrently 'npm run build:tailwind' 'npm run build:html' 'npm run build:js' 'npm run build:datepicker'",
     "build:tailwind": "tailwindcss -i ./src/main.css -o ./dist/main.css --minify",
     "build:html": "html-minifier-terser --input-dir ./src --output-dir dist/ --file-ext html --collapse-whitespace --remove-comments --minify-js true",
     "build:js": "uglifyjs ./src/main.js -o dist/main.js -c toplevel,sequences=false -m reserved=['$','require','exports']",
-    "build:helper": "copyfiles -f ./src/constant.js ./src/helper.js dist/",
     "build:datepicker": "copyfiles -f ./node_modules/air-datepicker/air-datepicker.js ./node_modules/air-datepicker/air-datepicker.css dist/",
     "dev": "concurrently 'npm run watch' 'npm run dev:server'",
     "dev:server": "http-server ./dist -p 3000 -f /index.html",
@@ -23,6 +23,7 @@
   "devDependencies": {
     "concurrently": "^9.0.1",
     "copyfiles": "^2.4.1",
+    "gh-pages": "^6.1.1",
     "html-minifier-terser": "^7.2.0",
     "http-server": "^14.1.1",
     "mkdirp": "^3.0.1",
