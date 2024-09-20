@@ -16,3 +16,22 @@
 </div>
 
 <br>
+
+### Developing Locally
+
+#### 1. Install dev dependencies
+
+```bash
+npm i -D
+```
+
+#### 2. Run dev script.
+
+```bash
+npm run dev
+# this will watch for changes in src/*.html and src/*.js
+# build to dist/ on change
+# and restart the server
+```
+
+You can view the local server at `localhost:3000`.

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "gh-pages -d dist",
-    "prebuild": "rimraf dist && mkdirp dist",
+    "cleanup": "rimraf dist && mkdirp dist",
+    "prebuild": "npm run cleanup",
     "build": "concurrently 'npm run build:tailwind' 'npm run build:html' 'npm run build:js' 'npm run build:datepicker'",
     "build:tailwind": "tailwindcss -i ./src/main.css -o ./dist/main.css --minify",
     "build:html": "html-minifier-terser --input-dir ./src --output-dir dist/ --file-ext html --collapse-whitespace --remove-comments --minify-js true",
@@ -14,7 +15,7 @@
     "build:datepicker": "copyfiles -f ./node_modules/air-datepicker/air-datepicker.js ./node_modules/air-datepicker/air-datepicker.css dist/",
     "dev": "concurrently 'npm run watch' 'npm run dev:server'",
     "dev:server": "http-server ./dist -p 3000 -f /index.html",
-    "prewatch": "rimraf dist && mkdirp dist",
+    "prewatch": "npm run cleanup",
     "watch": "nodemon --watch 'src/**/*' -e html,js --exec 'npm run build'"
   },
   "keywords": [],

@@ -17,7 +17,7 @@ function getElapasedWeeks(selectedDate, diff) {
             selectedDate.getMonth(),
             selectedDate.getDate()
         ).getTime();
-    let birthdayYearOffset = isThisYearsBirthdayPassed ? 0 : 1;
+    const birthdayYearOffset = isThisYearsBirthdayPassed ? 0 : 1;
     const dateOfLastBirthday = new Date(
         DATE_TODAY.getUTCFullYear() - birthdayYearOffset,
         selectedDate.getMonth(),
