@@ -12,17 +12,21 @@
     <script src="main.js" defer></script>
   </head>
   <body>
-    <div
-      id="root"
-      class="w-full flex flex-col align-center justify-center my-1"
-    >
+    <div id="root" class="flex flex-col align-center justify-center py-1">
+      <div id="loader" class="mt-[25vh] mx-auto my-auto hidden">
+        <img
+          class="animate-pulse size-36"
+          src="touch_grass.svg"
+          alt="Touch Grass"
+        />
+      </div>
       <input
-        class="border-2 p-1 text-center mx-auto placeholder-gray-500"
+        class="no-js hidden border-2 p-1 text-center mx-auto placeholder-gray-500"
         id="datepicker"
         type="text"
         placeholder="Select Your Birth Date"
       />
-      <div id="canvas" class="mx-auto"></div>
+      <div id="canvas" class="no-js hidden mx-auto"></div>
     </div>
   </body>
 </html>

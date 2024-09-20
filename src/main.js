@@ -7,7 +7,7 @@ const BOX_COLOR = 'bg-red-600';
 
 function getElapasedWeeks(selectedDate, diff) {
     // https://github.com/bryanbraun/your-life/blob/gh-pages/your-life.js
-    // mostly taken from reference above, with some modifications to make it work :3
+    // func getElapsedWeeeks is mostly taken from reference above, with some modifications to make it work :3
     const elapsedYears =
         DATE_TODAY.getUTCFullYear() - selectedDate.getUTCFullYear();
     const isThisYearsBirthdayPassed =
@@ -33,8 +33,6 @@ function getElapasedWeeks(selectedDate, diff) {
 
     return elapsedWeeks;
 }
-
-let boxes = null;
 
 const Canvas = {
     init: () => {
@@ -97,8 +95,8 @@ const Canvas = {
 };
 
 const DatePicker = {
-    init: () => {
-        return new AirDatepicker('#datepicker', {
+    init: (boxes, datepicker) => {
+        dp = new AirDatepicker('#datepicker', {
             locale: {
                 days: [
                     'Sunday',
@@ -176,20 +174,40 @@ const DatePicker = {
                 }
             },
         });
+
+        let isDatepickerClicked = false;
+        datepicker.onclick = () => {
+            if (!isDatepickerClicked) {
+                isDatepickerClicked = true;
+                dp.selectDate(INITIAL_DATE, { silent: false });
+            }
+        };
+    },
+};
+
+const Loader = {
+    init: (loader) => {
+        loader.classList.remove('hidden');
+    },
+    end: (loader, elems) => {
+        loader.classList.add('hidden');
+        for (const el of elems) {
+            el.classList.remove('hidden');
+        }
     },
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-    Canvas.init();
+    const loader = document.getElementById('loader');
+    Loader.init(loader);
 
-    boxes = document.querySelectorAll('.box');
+    Canvas.init();
+    const boxes = document.querySelectorAll('.box');
     const datepicker = document.getElementById('datepicker');
-    const dp = DatePicker.init();
-    let isDatepickerClicked = false;
-    datepicker.onclick = () => {
-        if (!isDatepickerClicked) {
-            dp.selectDate(INITIAL_DATE, { silent: false });
-        }
-        isDatepickerClicked = true;
-    };
+    DatePicker.init(boxes, datepicker);
+
+    const elems = document.querySelectorAll('.no-js');
+    setTimeout(() => {
+        Loader.end(loader, elems);
+    }, 3000);
 });
