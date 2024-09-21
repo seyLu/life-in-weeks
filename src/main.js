@@ -99,7 +99,7 @@ const Canvas = {
 
 const DatePicker = {
     init: (boxes, datepicker) => {
-        dp = new AirDatepicker('#datepicker', {
+        dp = new AirDatepicker(`#${datepicker.id}`, {
             locale: {
                 days: [
                     'Sunday',
@@ -155,6 +155,7 @@ const DatePicker = {
             },
             onSelect(date) {
                 const selectedDate = date.date;
+                localStorage.setItem('selectedDate', selectedDate);
                 const timeDiffInSeconds = Math.abs(
                     (DATE_TODAY.getTime() - selectedDate.getTime()) / 1000
                 );
@@ -178,13 +179,18 @@ const DatePicker = {
             },
         });
 
-        let isDatepickerClicked = false;
-        datepicker.onclick = () => {
-            if (!isDatepickerClicked) {
-                isDatepickerClicked = true;
-                dp.selectDate(INITIAL_DATE, { silent: false });
-            }
-        };
+        const storedSelectedDate = localStorage.getItem('selectedDate', null);
+        if (storedSelectedDate !== null) {
+            dp.selectDate(storedSelectedDate, { silent: false });
+        } else {
+            let isDatepickerClicked = false;
+            datepicker.onclick = () => {
+                if (!isDatepickerClicked) {
+                    isDatepickerClicked = true;
+                    dp.selectDate(INITIAL_DATE, { silent: false });
+                }
+            };
+        }
     },
 };
 
