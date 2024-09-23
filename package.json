@@ -10,6 +10,7 @@
     "prebuild": "npm run cleanup",
     "build": "concurrently 'npm run build:ts' 'npm run build:datepicker' 'npm run build:tailwind' 'npm run build:html' 'npm run build:img'",
     "build:ts": "node build.js",
+    "postbuild:ts": "uglifyjs ./dist/index.js -o dist/index.js -c toplevel,sequences=false -m reserved=['$','require','exports']",
     "build:tailwind": "tailwindcss -i ./src/index.css -o ./dist/index.css --minify",
     "build:html": "html-minifier-terser --input-dir ./src --output-dir dist/ --file-ext html --collapse-whitespace --remove-comments --minify-js true",
     "build:datepicker": "copyfiles -f ./node_modules/air-datepicker/air-datepicker.css dist/",
