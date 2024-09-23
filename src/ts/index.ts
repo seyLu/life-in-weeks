@@ -1,9 +1,9 @@
 'use strict';
 
 import Canvas from './canvas';
+import { LOADING_TIME } from './constant';
 import DatePicker from './datepicker';
 import Loader from './loader';
-import { LOADING_TIME } from './constant';
 
 document.addEventListener('DOMContentLoaded', function () {
     const loader = document.getElementById('loader');

@@ -1,6 +1,6 @@
 'use strict';
 
-import { LIFESPAN, WEEKS_IN_YEAR, BOX_WIDTH } from './constant';
+import { BOX_WIDTH, LIFESPAN, WEEKS_IN_YEAR } from './constant';
 
 const Canvas = {
     init: (canvas: HTMLElement) => {

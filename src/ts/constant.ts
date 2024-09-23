@@ -7,11 +7,11 @@ const BOX_COLOR = 'bg-red-600';
 const LOADING_TIME = 2000;
 
 export {
-    LIFESPAN,
-    WEEKS_IN_YEAR,
-    INITIAL_DATE,
-    DATE_TODAY,
-    BOX_WIDTH,
     BOX_COLOR,
+    BOX_WIDTH,
+    DATE_TODAY,
+    INITIAL_DATE,
+    LIFESPAN,
     LOADING_TIME,
+    WEEKS_IN_YEAR,
 };
