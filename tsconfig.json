@@ -18,5 +18,6 @@
     "noUnusedParameters": true,
     "noPropertyAccessFromIndexSignature": true,
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }

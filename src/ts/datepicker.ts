@@ -1,12 +1,7 @@
 'use strict';
 
-const LIFESPAN = 89;
-const WEEKS_IN_YEAR = 52;
-const INITIAL_DATE = new Date(2000, 0, 1);
-const DATE_TODAY = new Date();
-const BOX_WIDTH = 'w-[min(0.5rem,1.25vw)]';
-const BOX_COLOR = 'bg-red-600';
-const LOADING_TIME = 2000;
+import AirDatepicker from '../../node_modules/air-datepicker/air-datepicker';
+import { DATE_TODAY, WEEKS_IN_YEAR, BOX_COLOR, INITIAL_DATE } from './constant';
 
 function getElapasedWeeks(selectedDate: Date): number {
     // https://github.com/bryanbraun/your-life/blob/gh-pages/your-life.js
@@ -37,70 +32,8 @@ function getElapasedWeeks(selectedDate: Date): number {
     return elapsedWeeks;
 }
 
-const Canvas = {
-    init: (canvas: HTMLElement) => {
-        for (let age = -1; age <= LIFESPAN; age++) {
-            const row = document.createElement('div');
-            row.classList.add('flex');
-
-            const ageLabel = document.createElement('div');
-            ageLabel.classList.add(
-                'mr-1',
-                'w-4',
-                'h-2',
-                'text-xs',
-                'text-right'
-            );
-            if (age % 5 === 0) {
-                ageLabel.innerText = age.toString();
-            }
-            row.append(ageLabel);
-
-            for (let week = 0; week < WEEKS_IN_YEAR; week++) {
-                if (age === -1) {
-                    const weekLabel = document.createElement('div');
-                    weekLabel.classList.add(
-                        'mb-0',
-                        BOX_WIDTH,
-                        'h-4',
-                        'm-[1px]',
-                        'text-xs',
-                        'text-right'
-                    );
-                    if (week % 5 === 0) {
-                        if (week === 0) {
-                            week += 1;
-                        }
-                        weekLabel.innerText = week.toString();
-                    }
-                    row.append(weekLabel);
-                } else {
-                    const box = document.createElement('div');
-                    box.classList.add(
-                        'box',
-                        BOX_WIDTH,
-                        'h-2',
-                        'm-[1px]',
-                        'border-solid',
-                        'border',
-                        'border-sky-500'
-                    );
-                    box.dataset['week'] = (
-                        1 +
-                        age * WEEKS_IN_YEAR +
-                        week
-                    ).toString();
-                    row.append(box);
-                }
-            }
-            canvas.append(row);
-        }
-    },
-};
-
 const DatePicker = {
     init: (boxes: NodeListOf<Element>, datepicker: HTMLElement) => {
-        // @ts-ignore
         const dp = new AirDatepicker(`#${datepicker.id}`, {
             locale: {
                 days: [
@@ -158,7 +91,6 @@ const DatePicker = {
             onSelect(date: {
                 date: Date | Date[];
                 formattedDate: string | string[];
-                // @ts-ignore
                 datepicker: AirDatepicker<HTMLElement>;
             }) {
                 const selectedDate = date.date;
@@ -202,57 +134,4 @@ const DatePicker = {
     },
 };
 
-const Loader = {
-    init: (loader: HTMLElement) => {
-        loader.classList.remove('hidden');
-        localStorage.setItem('isPageVisited', true.toString());
-    },
-    end: (loader: HTMLElement) => {
-        loader.classList.add('hidden');
-    },
-    show: (elems: NodeListOf<Element>) => {
-        for (const el of elems) {
-            el.classList.remove('hidden');
-        }
-    },
-};
-
-document.addEventListener('DOMContentLoaded', function () {
-    const loader = document.getElementById('loader');
-    if (loader === null) {
-        console.error(`Missing element with id 'loader'`);
-        return;
-    }
-    const elems = document.querySelectorAll('.no-js');
-    if (elems === null) {
-        console.error(`Missing element with class 'no-js'`);
-        return;
-    }
-    const isPageVisited = localStorage.getItem('isPageVisited') === 'true';
-    !isPageVisited ? Loader.init(loader) : Loader.show(elems);
-
-    const canvas = document.getElementById('canvas');
-    if (canvas === null) {
-        console.error(`Missing element with id 'canvas'`);
-        return;
-    }
-    Canvas.init(canvas);
-    const boxes = document.querySelectorAll('.box');
-    if (boxes === null) {
-        console.error(`Missing element with class 'box'`);
-        return;
-    }
-    const datepicker = document.getElementById('datepicker');
-    if (datepicker === null) {
-        console.error(`Missing element with id 'datepicker'`);
-        return;
-    }
-    DatePicker.init(boxes, datepicker);
-
-    if (!isPageVisited) {
-        setTimeout(() => {
-            Loader.end(loader);
-            Loader.show(elems);
-        }, LOADING_TIME);
-    }
-});
+export default DatePicker;
