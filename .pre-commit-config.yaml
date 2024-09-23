@@ -13,4 +13,4 @@ repos:
     rev: v4.0.0-alpha.8
     hooks:
       - id: prettier
-        types_or: [yaml, toml, markdown, javascript, css, html]
+        types_or: [yaml, toml, markdown, javascript, ts, css, html]
